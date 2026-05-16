@@ -1218,7 +1218,7 @@ function Contact() {
   );
 }
 
-// =====================
+/// =====================
 // FOOTER
 // =====================
 function Footer() {
@@ -1231,6 +1231,8 @@ function Footer() {
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
+        flexWrap: "wrap",
+        gap: "1rem",
       }}
     >
       <span
@@ -1243,17 +1245,26 @@ function Footer() {
       >
         Egberipou Ebeli
       </span>
-      <span
+      
+      <a
+        href="https://github.com/Ebeli1"
+        target="_blank"
+        rel="noopener noreferrer"
         style={{
           fontFamily: "var(--ff-mono)",
           fontSize: "11px",
           letterSpacing: "0.15em",
-          color: "var(--c-text-3)",
+          color: "var(--c-gold)",
           textTransform: "uppercase",
+          textDecoration: "none",
+          transition: "opacity 0.2s",
         }}
+        onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.7")}
+        onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
       >
-        © {new Date().getFullYear()} — All rights reserved
-      </span>
+        GitHub
+      </a>
+      
       <span
         style={{
           fontFamily: "var(--ff-mono)",
