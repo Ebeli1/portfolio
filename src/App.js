@@ -640,7 +640,7 @@ function About() {
                 { label: "Location", value: "Lagos State, Nigeria" },
                 { label: "Email", value: "piantoebeli@gmail.com" },
                 { label: "Phone", value: "+234 813 283 9266" },
-                { label: "Open to", value: "Web3 & AI Projects" },
+                { label: "Open to", value: "Fintech & Web3/AI Projects" },
               ].map((item, i) => (
                 <div
                   key={item.label}
