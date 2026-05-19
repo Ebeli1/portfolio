@@ -596,7 +596,7 @@ function About() {
             >
               Building at the edge of{" "}
               <em style={{ color: "var(--c-gold)", fontStyle: "italic" }}>
-                AI & Web3
+                Fintech & AI/Web3
               </em>
             </h2>
             <p
@@ -790,33 +790,35 @@ function Skills() {
 }
 
 // =====================
-// PROJECTS SECTION (RESPONSIVE)
+// PROJECTS SECTION (WITH CLICKABLE LINKS)
 // =====================
 function Projects() {
   const projects = [
     {
       num: "01",
-      title: "SnappyX",
-      category: "Web3 Concept",
-      description:
-        "Blockchain-based marketplace and auction system. Explored decentralised transaction flows and trustless exchange models.",
-      tags: ["Blockchain", "Marketplace", "Web3"],
+      title: "propAIty.io",
+      category: "AI + Real Estate",
+      description: "AI-powered property valuation and real estate analytics platform. Uses machine learning to predict property values and market trends.",
+      tags: ["AI", "Real Estate", "Analytics"],
+      link: "https://ebeli1.github.io/propAIty.io/", 
+      linkText: "Visit propAIty.io ↗"
     },
     {
       num: "02",
-      title: "TerraChain AI",
-      category: "AI + Blockchain",
-      description:
-        "AI-assisted land registry and verification system with blockchain-inspired logic for secure record validation.",
-      tags: ["AI", "Land Registry", "Verification"],
+      title: "ArchSpace",
+      category: "Architecture & Design",
+      description: "Digital platform for architectural visualization and space planning. Showcases innovative design concepts and 3D spatial solutions.",
+      tags: ["Architecture", "3D", "Design"],
+      link: "https://archspace.vercel.app/",  
+      linkText: "Explore ArchSpace ↗"
     },
     {
       num: "03",
       title: "KudiTrack",
       category: "Fintech",
-      description:
-        "WhatsApp-based financial tracking for SMEs with automation workflows and AI-powered financial summaries.",
+      description: "WhatsApp-based financial tracking system for SMEs with automation workflows and AI-powered financial summaries. Simplifies expense tracking and reporting.",
       tags: ["Fintech", "Automation", "WhatsApp"],
+      link: "https://kudi-track.vercel.app/",  
     },
   ];
 
@@ -858,7 +860,7 @@ function Projects() {
                 alignItems: "flex-start",
                 padding: "1.5rem 0",
                 borderBottom: "1px solid var(--c-border)",
-                cursor: "default",
+                cursor: "pointer",
                 transition: "background 0.2s, padding 0.2s",
               }}
               onMouseEnter={(e) => {
@@ -875,6 +877,7 @@ function Projects() {
                 e.currentTarget.style.paddingLeft = "0";
                 e.currentTarget.style.paddingRight = "0";
               }}
+              onClick={() => window.open(project.link, "_blank")}
             >
               <div style={{ display: "flex", alignItems: "center", gap: "1rem", flexWrap: "wrap" }}>
                 <span
@@ -920,23 +923,36 @@ function Projects() {
               >
                 {project.description}
               </p>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
-                {project.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    style={{
-                      fontFamily: "var(--ff-mono)",
-                      fontSize: "9px",
-                      letterSpacing: "0.1em",
-                      textTransform: "uppercase",
-                      color: "var(--c-text-3)",
-                      border: "1px solid var(--c-border)",
-                      padding: "2px 8px",
-                    }}
-                  >
-                    {tag}
-                  </span>
-                ))}
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+                  {project.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      style={{
+                        fontFamily: "var(--ff-mono)",
+                        fontSize: "9px",
+                        letterSpacing: "0.1em",
+                        textTransform: "uppercase",
+                        color: "var(--c-text-3)",
+                        border: "1px solid var(--c-border)",
+                        padding: "2px 8px",
+                      }}
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                <span
+                  style={{
+                    fontFamily: "var(--ff-mono)",
+                    fontSize: "10px",
+                    letterSpacing: "0.1em",
+                    color: "var(--c-gold)",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  {project.linkText}
+                </span>
               </div>
             </motion.div>
           ))}
@@ -945,7 +961,6 @@ function Projects() {
     </Section>
   );
 }
-
 // =====================
 // EXPERIENCE SECTION (RESPONSIVE)
 // =====================
@@ -1027,7 +1042,7 @@ function Experience() {
                     marginBottom: "0.25rem",
                   }}
                 >
-                  Web3 & AI Product Builder
+                  Fintech & AI Product Builder
                 </h3>
                 <p
                   style={{
