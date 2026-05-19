@@ -818,7 +818,8 @@ function Projects() {
       category: "Fintech",
       description: "WhatsApp-based financial tracking system for SMEs with automation workflows and AI-powered financial summaries. Simplifies expense tracking and reporting.",
       tags: ["Fintech", "Automation", "WhatsApp"],
-      link: "https://kudi-track.vercel.app/",  
+      link: "https://kudi-track.vercel.app/",
+      linkText: "Visit KudiTrack ↗"  
     },
   ];
 
