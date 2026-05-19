@@ -2,6 +2,7 @@
 // ================================
 // PORTFOLIO — EDITORIAL DARK EDITION
 // Playfair Display + DM Sans | Warm Charcoal & Gold
+// FULLY RESPONSIVE + CV FIX
 // ================================
 
 import { BrowserRouter as Router } from "react-router-dom";
@@ -23,7 +24,7 @@ const FontLoader = () => {
 };
 
 // =====================
-// GLOBAL STYLES
+// GLOBAL STYLES (WITH RESPONSIVE)
 // =====================
 const GlobalStyles = () => {
   useEffect(() => {
@@ -88,6 +89,17 @@ const GlobalStyles = () => {
         height: 1px;
         background: var(--c-gold-dim);
       }
+
+      /* RESPONSIVE STYLES */
+      @media (max-width: 768px) {
+        body { font-size: 14px; }
+        .section-label { margin-bottom: 1.5rem; }
+        .section-label::after { flex: 0 0 20px; }
+      }
+
+      @media (max-width: 640px) {
+        .section-label { font-size: 9px; }
+      }
     `;
     document.head.appendChild(style);
     document.body.style.backgroundColor = "#0d0d0d";
@@ -123,11 +135,18 @@ function ScrollProgress() {
 }
 
 // =====================
-// NAVIGATION
+// NAVIGATION (RESPONSIVE)
 // =====================
 function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     const h = () => setScrolled(window.scrollY > 60);
@@ -153,7 +172,7 @@ function Nav() {
         left: 0,
         right: 0,
         zIndex: 50,
-        padding: "0 2rem",
+        padding: "0 1.5rem",
         height: "64px",
         display: "flex",
         alignItems: "center",
@@ -180,37 +199,96 @@ function Nav() {
         E. Ebeli
       </button>
 
-      {/* Desktop */}
-      <div style={{ display: "flex", gap: "2.5rem", alignItems: "center" }}>
-        {navItems.map((item) => (
-          <button
-            key={item}
-            onClick={() => scrollTo(item === "Home" ? "home" : item.toLowerCase())}
-            style={{
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              fontFamily: "var(--ff-body)",
-              fontSize: "13px",
-              fontWeight: 400,
-              letterSpacing: "0.06em",
-              color: "var(--c-text-2)",
-              transition: "color 0.2s",
-              display: window.innerWidth < 768 ? "none" : "block",
-            }}
-            onMouseEnter={(e) => (e.target.style.color = "var(--c-gold)")}
-            onMouseLeave={(e) => (e.target.style.color = "var(--c-text-2)")}
-          >
-            {item}
-          </button>
-        ))}
-      </div>
+      {/* Desktop Navigation */}
+      {!isMobile && (
+        <div style={{ display: "flex", gap: "2rem", alignItems: "center" }}>
+          {navItems.map((item) => (
+            <button
+              key={item}
+              onClick={() => scrollTo(item === "Home" ? "home" : item.toLowerCase())}
+              style={{
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                fontFamily: "var(--ff-body)",
+                fontSize: "13px",
+                fontWeight: 400,
+                letterSpacing: "0.06em",
+                color: "var(--c-text-2)",
+                transition: "color 0.2s",
+              }}
+              onMouseEnter={(e) => (e.target.style.color = "var(--c-gold)")}
+              onMouseLeave={(e) => (e.target.style.color = "var(--c-text-2)")}
+            >
+              {item}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* Mobile Menu Button */}
+      {isMobile && (
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          style={{
+            background: "none",
+            border: "none",
+            color: "var(--c-text)",
+            fontSize: "24px",
+            cursor: "pointer",
+          }}
+        >
+          {isOpen ? "✕" : "☰"}
+        </button>
+      )}
+
+      {/* Mobile Menu Dropdown */}
+      {isMobile && isOpen && (
+        <div
+          style={{
+            position: "absolute",
+            top: "64px",
+            left: 0,
+            right: 0,
+            background: "rgba(13,13,13,0.95)",
+            backdropFilter: "blur(20px)",
+            borderBottom: "1px solid var(--c-border)",
+            padding: "1rem",
+            display: "flex",
+            flexDirection: "column",
+            gap: "0.5rem",
+          }}
+        >
+          {navItems.map((item) => (
+            <button
+              key={item}
+              onClick={() => scrollTo(item === "Home" ? "home" : item.toLowerCase())}
+              style={{
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                fontFamily: "var(--ff-body)",
+                fontSize: "16px",
+                fontWeight: 400,
+                color: "var(--c-text-2)",
+                padding: "0.75rem",
+                textAlign: "left",
+                transition: "color 0.2s",
+              }}
+              onMouseEnter={(e) => (e.target.style.color = "var(--c-gold)")}
+              onMouseLeave={(e) => (e.target.style.color = "var(--c-text-2)")}
+            >
+              {item}
+            </button>
+          ))}
+        </div>
+      )}
     </motion.nav>
   );
 }
 
 // =====================
-// HERO SECTION
+// HERO SECTION (RESPONSIVE)
 // =====================
 function Hero() {
   return (
@@ -224,19 +302,16 @@ function Hero() {
         overflow: "hidden",
       }}
     >
-      {/* Full-bleed background image */}
       <div
         style={{
           position: "absolute",
           inset: 0,
-          backgroundImage: "url('/profile.jpg')",
+          backgroundImage: "url('/profile.png')",
           backgroundSize: "cover",
           backgroundPosition: "center top",
           backgroundRepeat: "no-repeat",
         }}
       />
-
-      {/* Layered overlays for depth */}
       <div
         style={{
           position: "absolute",
@@ -253,8 +328,6 @@ function Hero() {
             "linear-gradient(to top, rgba(13,13,13,1) 0%, rgba(13,13,13,0.6) 35%, transparent 65%)",
         }}
       />
-
-      {/* Subtle grain texture */}
       <div
         style={{
           position: "absolute",
@@ -268,15 +341,13 @@ function Hero() {
           pointerEvents: "none",
         }}
       />
-
-      {/* Content */}
       <div
         style={{
           position: "relative",
           zIndex: 2,
           maxWidth: "1200px",
           margin: "0 auto",
-          padding: "0 3rem 6rem",
+          padding: "0 1.5rem 4rem",
           width: "100%",
         }}
       >
@@ -286,11 +357,11 @@ function Hero() {
           transition={{ duration: 0.4, delay: 0.2 }}
           style={{
             fontFamily: "var(--ff-mono)",
-            fontSize: "11px",
+            fontSize: "10px",
             letterSpacing: "0.25em",
             textTransform: "uppercase",
             color: "var(--c-gold)",
-            marginBottom: "1.5rem",
+            marginBottom: "1rem",
           }}
         >
           Portfolio — 2025
@@ -302,7 +373,7 @@ function Hero() {
           transition={{ duration: 0.8, delay: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
           style={{
             fontFamily: "var(--ff-display)",
-            fontSize: "clamp(3rem, 8vw, 6.5rem)",
+            fontSize: "clamp(2.5rem, 8vw, 6.5rem)",
             fontWeight: 700,
             lineHeight: 1.0,
             letterSpacing: "-0.02em",
@@ -319,12 +390,12 @@ function Hero() {
           style={{
             fontFamily: "var(--ff-display)",
             fontStyle: "italic",
-            fontSize: "clamp(3rem, 8vw, 6.5rem)",
+            fontSize: "clamp(2.5rem, 8vw, 6.5rem)",
             fontWeight: 400,
             lineHeight: 1.0,
             letterSpacing: "-0.02em",
             color: "var(--c-gold)",
-            marginBottom: "2rem",
+            marginBottom: "1.5rem",
           }}
         >
           Ebeli
@@ -336,12 +407,12 @@ function Hero() {
           transition={{ duration: 0.7, delay: 0.6 }}
           style={{
             fontFamily: "var(--ff-body)",
-            fontSize: "15px",
+            fontSize: "clamp(12px, 4vw, 15px)",
             fontWeight: 300,
             color: "var(--c-text-2)",
             letterSpacing: "0.06em",
             textTransform: "uppercase",
-            marginBottom: "3rem",
+            marginBottom: "2rem",
             maxWidth: "480px",
           }}
         >
@@ -356,15 +427,16 @@ function Hero() {
         >
           <a
             href="/resume.pdf"
+            download
             style={{
               display: "inline-flex",
               alignItems: "center",
               gap: "8px",
-              padding: "12px 28px",
+              padding: "12px 24px",
               background: "var(--c-gold)",
               color: "#0d0d0d",
               fontFamily: "var(--ff-body)",
-              fontSize: "13px",
+              fontSize: "clamp(11px, 3vw, 13px)",
               fontWeight: 500,
               letterSpacing: "0.08em",
               textTransform: "uppercase",
@@ -384,11 +456,11 @@ function Hero() {
               display: "inline-flex",
               alignItems: "center",
               gap: "8px",
-              padding: "12px 28px",
+              padding: "12px 24px",
               background: "transparent",
               color: "var(--c-text)",
               fontFamily: "var(--ff-body)",
-              fontSize: "13px",
+              fontSize: "clamp(11px, 3vw, 13px)",
               fontWeight: 400,
               letterSpacing: "0.08em",
               textTransform: "uppercase",
@@ -410,15 +482,14 @@ function Hero() {
         </motion.div>
       </div>
 
-      {/* Scroll indicator */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.4, duration: 0.8 }}
         style={{
           position: "absolute",
-          bottom: "2.5rem",
-          right: "3rem",
+          bottom: "1.5rem",
+          right: "1.5rem",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -429,7 +500,7 @@ function Hero() {
         <span
           style={{
             fontFamily: "var(--ff-mono)",
-            fontSize: "10px",
+            fontSize: "9px",
             letterSpacing: "0.2em",
             color: "var(--c-text-3)",
             writingMode: "vertical-rl",
@@ -440,7 +511,7 @@ function Hero() {
         <div
           style={{
             width: "1px",
-            height: "48px",
+            height: "40px",
             background: "linear-gradient(to bottom, var(--c-gold), transparent)",
           }}
         />
@@ -450,19 +521,19 @@ function Hero() {
 }
 
 // =====================
-// SECTION WRAPPER
+// SECTION WRAPPER (RESPONSIVE)
 // =====================
 function Section({ id, children, alt = false }) {
   return (
     <section
       id={id}
       style={{
-        padding: "8rem 0",
+        padding: "4rem 0",
         background: alt ? "var(--c-surface)" : "var(--c-bg)",
         borderTop: "1px solid var(--c-border)",
       }}
     >
-      <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 3rem" }}>
+      <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 1.5rem" }}>
         {children}
       </div>
     </section>
@@ -470,7 +541,7 @@ function Section({ id, children, alt = false }) {
 }
 
 // =====================
-// ABOUT SECTION
+// ABOUT SECTION (RESPONSIVE)
 // =====================
 function About() {
   return (
@@ -486,8 +557,8 @@ function About() {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: "5rem",
+            gridTemplateColumns: "1fr",
+            gap: "3rem",
             alignItems: "start",
           }}
         >
@@ -495,11 +566,11 @@ function About() {
             <h2
               style={{
                 fontFamily: "var(--ff-display)",
-                fontSize: "clamp(2rem, 4vw, 3.2rem)",
+                fontSize: "clamp(1.8rem, 5vw, 3.2rem)",
                 fontWeight: 600,
                 lineHeight: 1.15,
                 letterSpacing: "-0.02em",
-                marginBottom: "2rem",
+                marginBottom: "1.5rem",
                 color: "var(--c-text)",
               }}
             >
@@ -540,7 +611,7 @@ function About() {
             <div
               style={{
                 borderLeft: "1px solid var(--c-border)",
-                paddingLeft: "3rem",
+                paddingLeft: "1.5rem",
               }}
             >
               {[
@@ -552,15 +623,15 @@ function About() {
                 <div
                   key={item.label}
                   style={{
-                    paddingBottom: "1.75rem",
-                    marginBottom: "1.75rem",
+                    paddingBottom: "1.5rem",
+                    marginBottom: "1.5rem",
                     borderBottom: i < 3 ? "1px solid var(--c-border)" : "none",
                   }}
                 >
                   <div
                     style={{
                       fontFamily: "var(--ff-mono)",
-                      fontSize: "10px",
+                      fontSize: "9px",
                       letterSpacing: "0.18em",
                       textTransform: "uppercase",
                       color: "var(--c-gold)",
@@ -572,9 +643,10 @@ function About() {
                   <div
                     style={{
                       fontFamily: "var(--ff-body)",
-                      fontSize: "15px",
+                      fontSize: "14px",
                       fontWeight: 400,
                       color: "var(--c-text)",
+                      wordBreak: "break-word",
                     }}
                   >
                     {item.value}
@@ -590,7 +662,7 @@ function About() {
 }
 
 // =====================
-// SKILLS SECTION
+// SKILLS SECTION (RESPONSIVE)
 // =====================
 function Skills() {
   const skills = {
@@ -613,10 +685,10 @@ function Skills() {
         <h2
           style={{
             fontFamily: "var(--ff-display)",
-            fontSize: "clamp(1.8rem, 3.5vw, 3rem)",
+            fontSize: "clamp(1.5rem, 4vw, 3rem)",
             fontWeight: 600,
             letterSpacing: "-0.02em",
-            marginBottom: "4rem",
+            marginBottom: "2rem",
             color: "var(--c-text)",
           }}
         >
@@ -626,7 +698,7 @@ function Skills() {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(4, 1fr)",
+            gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
             gap: "1px",
             background: "var(--c-border)",
             border: "1px solid var(--c-border)",
@@ -641,7 +713,7 @@ function Skills() {
               viewport={{ once: true }}
               style={{
                 background: "var(--c-surface)",
-                padding: "2.5rem 2rem",
+                padding: "1.5rem",
                 transition: "background 0.2s",
               }}
               onMouseEnter={(e) => (e.currentTarget.style.background = "var(--c-surface-2)")}
@@ -650,11 +722,11 @@ function Skills() {
               <div
                 style={{
                   fontFamily: "var(--ff-mono)",
-                  fontSize: "10px",
+                  fontSize: "9px",
                   letterSpacing: "0.2em",
                   textTransform: "uppercase",
                   color: "var(--c-gold)",
-                  marginBottom: "1.5rem",
+                  marginBottom: "1rem",
                 }}
               >
                 0{idx + 1}
@@ -662,10 +734,10 @@ function Skills() {
               <h3
                 style={{
                   fontFamily: "var(--ff-display)",
-                  fontSize: "18px",
+                  fontSize: "16px",
                   fontWeight: 600,
                   color: "var(--c-text)",
-                  marginBottom: "1.25rem",
+                  marginBottom: "1rem",
                 }}
               >
                 {category}
@@ -676,11 +748,11 @@ function Skills() {
                     key={skill}
                     style={{
                       fontFamily: "var(--ff-body)",
-                      fontSize: "13px",
+                      fontSize: "12px",
                       fontWeight: 300,
                       color: "var(--c-text-2)",
                       borderBottom: "1px solid var(--c-border)",
-                      paddingBottom: "0.5rem",
+                      paddingBottom: "0.4rem",
                     }}
                   >
                     {skill}
@@ -696,7 +768,7 @@ function Skills() {
 }
 
 // =====================
-// PROJECTS SECTION
+// PROJECTS SECTION (RESPONSIVE)
 // =====================
 function Projects() {
   const projects = [
@@ -739,10 +811,10 @@ function Projects() {
         <h2
           style={{
             fontFamily: "var(--ff-display)",
-            fontSize: "clamp(1.8rem, 3.5vw, 3rem)",
+            fontSize: "clamp(1.5rem, 4vw, 3rem)",
             fontWeight: 600,
             letterSpacing: "-0.02em",
-            marginBottom: "4rem",
+            marginBottom: "2rem",
             color: "var(--c-text)",
           }}
         >
@@ -758,21 +830,21 @@ function Projects() {
               transition={{ delay: idx * 0.12, duration: 0.6 }}
               viewport={{ once: true }}
               style={{
-                display: "grid",
-                gridTemplateColumns: "80px 1fr auto",
-                gap: "2rem",
-                alignItems: "start",
-                padding: "2.5rem 0",
+                display: "flex",
+                flexDirection: "column",
+                gap: "1rem",
+                alignItems: "flex-start",
+                padding: "1.5rem 0",
                 borderBottom: "1px solid var(--c-border)",
                 cursor: "default",
-                transition: "background 0.2s",
+                transition: "background 0.2s, padding 0.2s",
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.background = "var(--c-surface)";
-                e.currentTarget.style.marginLeft = "-2rem";
-                e.currentTarget.style.marginRight = "-2rem";
-                e.currentTarget.style.paddingLeft = "2rem";
-                e.currentTarget.style.paddingRight = "2rem";
+                e.currentTarget.style.marginLeft = "-1rem";
+                e.currentTarget.style.marginRight = "-1rem";
+                e.currentTarget.style.paddingLeft = "1rem";
+                e.currentTarget.style.paddingRight = "1rem";
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.background = "transparent";
@@ -782,66 +854,62 @@ function Projects() {
                 e.currentTarget.style.paddingRight = "0";
               }}
             >
-              <span
-                style={{
-                  fontFamily: "var(--ff-mono)",
-                  fontSize: "11px",
-                  color: "var(--c-gold)",
-                  letterSpacing: "0.1em",
-                  paddingTop: "4px",
-                }}
-              >
-                {project.num}
-              </span>
-              <div>
-                <div style={{ display: "flex", alignItems: "baseline", gap: "1.5rem", marginBottom: "0.75rem" }}>
-                  <h3
-                    style={{
-                      fontFamily: "var(--ff-display)",
-                      fontSize: "1.6rem",
-                      fontWeight: 600,
-                      color: "var(--c-text)",
-                      letterSpacing: "-0.01em",
-                    }}
-                  >
-                    {project.title}
-                  </h3>
-                  <span
-                    style={{
-                      fontFamily: "var(--ff-mono)",
-                      fontSize: "10px",
-                      letterSpacing: "0.15em",
-                      textTransform: "uppercase",
-                      color: "var(--c-text-3)",
-                    }}
-                  >
-                    {project.category}
-                  </span>
-                </div>
-                <p
+              <div style={{ display: "flex", alignItems: "center", gap: "1rem", flexWrap: "wrap" }}>
+                <span
                   style={{
-                    fontSize: "14px",
-                    fontWeight: 300,
-                    color: "var(--c-text-2)",
-                    lineHeight: 1.7,
-                    maxWidth: "560px",
+                    fontFamily: "var(--ff-mono)",
+                    fontSize: "11px",
+                    color: "var(--c-gold)",
+                    letterSpacing: "0.1em",
                   }}
                 >
-                  {project.description}
-                </p>
+                  {project.num}
+                </span>
+                <h3
+                  style={{
+                    fontFamily: "var(--ff-display)",
+                    fontSize: "1.3rem",
+                    fontWeight: 600,
+                    color: "var(--c-text)",
+                    letterSpacing: "-0.01em",
+                  }}
+                >
+                  {project.title}
+                </h3>
+                <span
+                  style={{
+                    fontFamily: "var(--ff-mono)",
+                    fontSize: "9px",
+                    letterSpacing: "0.15em",
+                    textTransform: "uppercase",
+                    color: "var(--c-text-3)",
+                  }}
+                >
+                  {project.category}
+                </span>
               </div>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", justifyContent: "flex-end", paddingTop: "4px" }}>
+              <p
+                style={{
+                  fontSize: "13px",
+                  fontWeight: 300,
+                  color: "var(--c-text-2)",
+                  lineHeight: 1.7,
+                }}
+              >
+                {project.description}
+              </p>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
                 {project.tags.map((tag) => (
                   <span
                     key={tag}
                     style={{
                       fontFamily: "var(--ff-mono)",
-                      fontSize: "10px",
+                      fontSize: "9px",
                       letterSpacing: "0.1em",
                       textTransform: "uppercase",
                       color: "var(--c-text-3)",
                       border: "1px solid var(--c-border)",
-                      padding: "3px 8px",
+                      padding: "2px 8px",
                     }}
                   >
                     {tag}
@@ -857,7 +925,7 @@ function Projects() {
 }
 
 // =====================
-// EXPERIENCE SECTION
+// EXPERIENCE SECTION (RESPONSIVE)
 // =====================
 function Experience() {
   return (
@@ -873,17 +941,17 @@ function Experience() {
         <h2
           style={{
             fontFamily: "var(--ff-display)",
-            fontSize: "clamp(1.8rem, 3.5vw, 3rem)",
+            fontSize: "clamp(1.5rem, 4vw, 3rem)",
             fontWeight: 600,
             letterSpacing: "-0.02em",
-            marginBottom: "4rem",
+            marginBottom: "2rem",
             color: "var(--c-text)",
           }}
         >
           Background &amp; Education
         </h2>
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "5rem" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "3rem" }}>
           {/* Work */}
           <div>
             <div
@@ -893,7 +961,7 @@ function Experience() {
                 letterSpacing: "0.2em",
                 textTransform: "uppercase",
                 color: "var(--c-text-3)",
-                marginBottom: "2rem",
+                marginBottom: "1.5rem",
               }}
             >
               Work
@@ -920,7 +988,7 @@ function Experience() {
                 <div
                   style={{
                     fontFamily: "var(--ff-mono)",
-                    fontSize: "10px",
+                    fontSize: "9px",
                     letterSpacing: "0.15em",
                     color: "var(--c-gold)",
                     marginBottom: "0.5rem",
@@ -931,7 +999,7 @@ function Experience() {
                 <h3
                   style={{
                     fontFamily: "var(--ff-display)",
-                    fontSize: "1.3rem",
+                    fontSize: "1.2rem",
                     fontWeight: 600,
                     color: "var(--c-text)",
                     marginBottom: "0.25rem",
@@ -942,11 +1010,11 @@ function Experience() {
                 <p
                   style={{
                     fontFamily: "var(--ff-mono)",
-                    fontSize: "11px",
+                    fontSize: "10px",
                     letterSpacing: "0.1em",
                     color: "var(--c-text-3)",
                     textTransform: "uppercase",
-                    marginBottom: "1.25rem",
+                    marginBottom: "1rem",
                   }}
                 >
                   Independent
@@ -964,7 +1032,7 @@ function Experience() {
                         display: "flex",
                         gap: "0.75rem",
                         alignItems: "flex-start",
-                        fontSize: "14px",
+                        fontSize: "13px",
                         fontWeight: 300,
                         color: "var(--c-text-2)",
                         lineHeight: 1.6,
@@ -988,13 +1056,13 @@ function Experience() {
                 letterSpacing: "0.2em",
                 textTransform: "uppercase",
                 color: "var(--c-text-3)",
-                marginBottom: "2rem",
+                marginBottom: "1.5rem",
               }}
             >
               Education
             </div>
 
-            <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
               {[
                 {
                   degree: "B.Sc. Accountancy",
@@ -1010,7 +1078,7 @@ function Experience() {
                 <div
                   key={i}
                   style={{
-                    padding: "1.75rem",
+                    padding: "1.5rem",
                     border: "1px solid var(--c-border)",
                     background: "var(--c-bg)",
                   }}
@@ -1018,7 +1086,7 @@ function Experience() {
                   <div
                     style={{
                       fontFamily: "var(--ff-mono)",
-                      fontSize: "10px",
+                      fontSize: "9px",
                       letterSpacing: "0.15em",
                       color: "var(--c-gold)",
                       marginBottom: "0.5rem",
@@ -1030,7 +1098,7 @@ function Experience() {
                   <h4
                     style={{
                       fontFamily: "var(--ff-display)",
-                      fontSize: "1.15rem",
+                      fontSize: "1rem",
                       fontWeight: 600,
                       color: "var(--c-text)",
                       marginBottom: "0.25rem",
@@ -1040,7 +1108,7 @@ function Experience() {
                   </h4>
                   <p
                     style={{
-                      fontSize: "13px",
+                      fontSize: "12px",
                       fontWeight: 300,
                       color: "var(--c-text-2)",
                     }}
@@ -1058,7 +1126,7 @@ function Experience() {
 }
 
 // =====================
-// CONTACT SECTION
+// CONTACT SECTION (RESPONSIVE)
 // =====================
 function Contact() {
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
@@ -1068,17 +1136,18 @@ function Contact() {
     e.preventDefault();
     setSubmitted(true);
     setTimeout(() => setSubmitted(false), 3000);
+    console.log("Form submitted:", formData);
   };
 
   const inputStyle = {
     width: "100%",
-    padding: "14px 0",
+    padding: "12px 0",
     background: "transparent",
     border: "none",
     borderBottom: "1px solid var(--c-border)",
     color: "var(--c-text)",
     fontFamily: "var(--ff-body)",
-    fontSize: "15px",
+    fontSize: "14px",
     fontWeight: 300,
     outline: "none",
     transition: "border-color 0.2s",
@@ -1095,17 +1164,17 @@ function Contact() {
       >
         <div className="section-label">Contact</div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "6rem", alignItems: "start" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "3rem", alignItems: "start" }}>
           <div>
             <h2
               style={{
                 fontFamily: "var(--ff-display)",
-                fontSize: "clamp(2rem, 4vw, 3.5rem)",
+                fontSize: "clamp(1.8rem, 5vw, 3.5rem)",
                 fontWeight: 600,
                 lineHeight: 1.1,
                 letterSpacing: "-0.02em",
                 color: "var(--c-text)",
-                marginBottom: "2rem",
+                marginBottom: "1.5rem",
               }}
             >
               Let's build{" "}
@@ -1113,40 +1182,41 @@ function Contact() {
             </h2>
             <p
               style={{
-                fontSize: "15px",
+                fontSize: "14px",
                 fontWeight: 300,
                 color: "var(--c-text-2)",
                 lineHeight: 1.85,
-                marginBottom: "3rem",
+                marginBottom: "2rem",
               }}
             >
               Always interested in new opportunities, collaborations, or just a conversation
               about Web3, AI, and the future of technology.
             </p>
-            <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
               {[
                 { label: "Email", value: "piantoebeli@gmail.com" },
                 { label: "Phone", value: "+234 813 283 9266" },
                 { label: "Location", value: "Lagos State, Nigeria" },
               ].map((item) => (
-                <div key={item.label} style={{ display: "flex", gap: "1.5rem", alignItems: "baseline" }}>
+                <div key={item.label} style={{ display: "flex", gap: "1rem", alignItems: "baseline", flexWrap: "wrap" }}>
                   <span
                     style={{
                       fontFamily: "var(--ff-mono)",
-                      fontSize: "10px",
+                      fontSize: "9px",
                       letterSpacing: "0.18em",
                       textTransform: "uppercase",
                       color: "var(--c-gold)",
-                      minWidth: "64px",
+                      minWidth: "60px",
                     }}
                   >
                     {item.label}
                   </span>
                   <span
                     style={{
-                      fontSize: "14px",
+                      fontSize: "13px",
                       fontWeight: 300,
                       color: "var(--c-text-2)",
+                      wordBreak: "break-word",
                     }}
                   >
                     {item.value}
@@ -1179,9 +1249,9 @@ function Contact() {
                 onBlur={(e) => (e.target.style.borderBottomColor = "var(--c-border)")}
               />
             </div>
-            <div style={{ marginBottom: "2.5rem" }}>
+            <div style={{ marginBottom: "2rem" }}>
               <textarea
-                rows={5}
+                rows={4}
                 placeholder="Your Message"
                 required
                 style={{ ...inputStyle, resize: "none" }}
@@ -1196,11 +1266,11 @@ function Contact() {
               type="submit"
               style={{
                 width: "100%",
-                padding: "14px",
+                padding: "12px",
                 background: submitted ? "var(--c-surface-2)" : "var(--c-gold)",
                 color: submitted ? "var(--c-gold)" : "#0d0d0d",
                 fontFamily: "var(--ff-body)",
-                fontSize: "13px",
+                fontSize: "12px",
                 fontWeight: 500,
                 letterSpacing: "0.1em",
                 textTransform: "uppercase",
@@ -1218,28 +1288,28 @@ function Contact() {
   );
 }
 
-/// =====================
-// FOOTER
+// =====================
+// FOOTER (RESPONSIVE WITH GITHUB LINK)
 // =====================
 function Footer() {
   return (
     <footer
       style={{
-        padding: "3rem",
+        padding: "2rem 1.5rem",
         background: "var(--c-bg)",
         borderTop: "1px solid var(--c-border)",
         display: "flex",
-        justifyContent: "space-between",
+        flexDirection: "column",
         alignItems: "center",
-        flexWrap: "wrap",
         gap: "1rem",
+        textAlign: "center",
       }}
     >
       <span
         style={{
           fontFamily: "var(--ff-display)",
           fontStyle: "italic",
-          fontSize: "16px",
+          fontSize: "14px",
           color: "var(--c-text-3)",
         }}
       >
@@ -1252,7 +1322,7 @@ function Footer() {
         rel="noopener noreferrer"
         style={{
           fontFamily: "var(--ff-mono)",
-          fontSize: "11px",
+          fontSize: "10px",
           letterSpacing: "0.15em",
           color: "var(--c-gold)",
           textTransform: "uppercase",
@@ -1262,19 +1332,38 @@ function Footer() {
         onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.7")}
         onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
       >
-        GitHub
+        GitHub ↗
       </a>
       
-      <span
+      <div
         style={{
-          fontFamily: "var(--ff-mono)",
-          fontSize: "11px",
-          letterSpacing: "0.1em",
-          color: "var(--c-text-3)",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: "0.25rem",
         }}
       >
-        Lagos · Nigeria
-      </span>
+        <span
+          style={{
+            fontFamily: "var(--ff-mono)",
+            fontSize: "9px",
+            letterSpacing: "0.1em",
+            color: "var(--c-text-3)",
+          }}
+        >
+          Lagos · Nigeria
+        </span>
+        <span
+          style={{
+            fontFamily: "var(--ff-mono)",
+            fontSize: "9px",
+            letterSpacing: "0.1em",
+            color: "var(--c-text-3)",
+          }}
+        >
+          © {new Date().getFullYear()}
+        </span>
+      </div>
     </footer>
   );
 }
