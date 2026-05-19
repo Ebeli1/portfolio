@@ -1166,17 +1166,49 @@ function Experience() {
 }
 
 // =====================
-// CONTACT SECTION (RESPONSIVE)
+// CONTACT SECTION (WITH FORMSUBMIT)
 // =====================
 function Contact() {
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 3000);
-    console.log("Form submitted:", formData);
+    setIsSubmitting(true);
+    setError(false);
+    
+    try {
+      const response = await fetch('https://formsubmit.co/ajax/piantoebeli@gmail.com', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          message: formData.message,
+          _subject: `Portfolio Contact from ${formData.name}`,
+          _captcha: 'false'
+        })
+      });
+      
+      if (response.ok) {
+        setSubmitted(true);
+        setFormData({ name: "", email: "", message: "" });
+        setTimeout(() => setSubmitted(false), 5000);
+      } else {
+        setError(true);
+        setTimeout(() => setError(false), 3000);
+      }
+    } catch (err) {
+      setError(true);
+      setTimeout(() => setError(false), 3000);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const inputStyle = {
@@ -1230,8 +1262,7 @@ function Contact() {
               }}
             >
               Always interested in new opportunities, collaborations, or just a conversation
-              about Frontend development, FinTech products, Web3, AI, and the future of technology, and building things that
-              actually work in the real world.
+              about Web3, AI, and the future of technology.
             </p>
             <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
               {[
@@ -1271,8 +1302,10 @@ function Contact() {
             <div style={{ marginBottom: "1.5rem" }}>
               <input
                 type="text"
+                name="name"
                 placeholder="Your Name"
                 required
+                value={formData.name}
                 style={inputStyle}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 onFocus={(e) => (e.target.style.borderBottomColor = "var(--c-gold)")}
@@ -1282,8 +1315,10 @@ function Contact() {
             <div style={{ marginBottom: "1.5rem" }}>
               <input
                 type="email"
+                name="email"
                 placeholder="Your Email"
                 required
+                value={formData.email}
                 style={inputStyle}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 onFocus={(e) => (e.target.style.borderBottomColor = "var(--c-gold)")}
@@ -1293,8 +1328,10 @@ function Contact() {
             <div style={{ marginBottom: "2rem" }}>
               <textarea
                 rows={4}
+                name="message"
                 placeholder="Your Message"
                 required
+                value={formData.message}
                 style={{ ...inputStyle, resize: "none" }}
                 onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                 onFocus={(e) => (e.target.style.borderBottomColor = "var(--c-gold)")}
@@ -1305,22 +1342,24 @@ function Contact() {
               whileHover={{ scale: 1.01 }}
               whileTap={{ scale: 0.98 }}
               type="submit"
+              disabled={isSubmitting}
               style={{
                 width: "100%",
                 padding: "12px",
-                background: submitted ? "var(--c-surface-2)" : "var(--c-gold)",
-                color: submitted ? "var(--c-gold)" : "#0d0d0d",
+                background: submitted ? "var(--c-surface-2)" : (error ? "#a07c45" : "var(--c-gold)"),
+                color: submitted ? "var(--c-gold)" : (error ? "#0d0d0d" : "#0d0d0d"),
                 fontFamily: "var(--ff-body)",
                 fontSize: "12px",
                 fontWeight: 500,
                 letterSpacing: "0.1em",
                 textTransform: "uppercase",
                 border: submitted ? "1px solid var(--c-gold)" : "none",
-                cursor: "pointer",
+                cursor: isSubmitting ? "not-allowed" : "pointer",
                 transition: "all 0.3s",
+                opacity: isSubmitting ? 0.7 : 1,
               }}
             >
-              {submitted ? "✓ Message Sent" : "Send Message"}
+              {isSubmitting ? "Sending..." : (submitted ? "✓ Message Sent!" : (error ? "✗ Failed. Try Again" : "Send Message"))}
             </motion.button>
           </form>
         </div>
