@@ -1166,7 +1166,7 @@ function Experience() {
 }
 
 // =====================
-// CONTACT SECTION (WITH FORMSUBMIT)
+// CONTACT SECTION (WORKING WITH WEB3FORMS)
 // =====================
 function Contact() {
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
@@ -1180,22 +1180,26 @@ function Contact() {
     setError(false);
     
     try {
-      const response = await fetch('https://formsubmit.co/ajax/piantoebeli@gmail.com', {
+      const response = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json'
         },
         body: JSON.stringify({
+          access_key: 'a47014b0-adc3-4d8e-b55f-90eb884c6a4b', // <-- REPLACE THIS!
           name: formData.name,
           email: formData.email,
           message: formData.message,
-          _subject: `Portfolio Contact from ${formData.name}`,
-          _captcha: 'false'
+          subject: `Portfolio Contact from ${formData.name}`,
+          from_name: formData.name,
+          replyto: formData.email
         })
       });
       
-      if (response.ok) {
+      const result = await response.json();
+      
+      if (result.success) {
         setSubmitted(true);
         setFormData({ name: "", email: "", message: "" });
         setTimeout(() => setSubmitted(false), 5000);
@@ -1367,7 +1371,6 @@ function Contact() {
     </Section>
   );
 }
-
 // =====================
 // FOOTER (RESPONSIVE WITH GITHUB LINK)
 // =====================
