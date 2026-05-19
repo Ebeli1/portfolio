@@ -436,7 +436,7 @@ function Hero() {
             maxWidth: "480px",
           }}
         >
-          AI-Assisted Developer &nbsp;·&nbsp; Web3 Builder &nbsp;·&nbsp; Systems Engineer
+          Frontend Developer &nbsp;·&nbsp;  React & Next.js &nbsp;·&nbsp; FinTech & UI Design
         </motion.p>
 
         <motion.div
@@ -608,10 +608,10 @@ function About() {
                 fontWeight: 300,
               }}
             >
-              I'm an AI-assisted Software Developer and Web3-focused builder with experience
-              designing and developing decentralized and AI-powered digital products. I
-              specialise in front-end and full-stack web development using modern
-              technologies and AI coding workflows.
+               I'm a Frontend Developer working with React, Next.js, JavaScript, HTML,
+              CSS, and Node.js — focused on shipping clean, scalable web products that
+              solve real problems. My projects sit at the intersection of great UI and
+              practical business thinking, shaped by my background in Accounting.
             </p>
             <p
               style={{
@@ -621,9 +621,11 @@ function About() {
                 fontWeight: 300,
               }}
             >
-              My passion lies in contributing to the decentralised economy through
-              scalable, transparent, and user-focused digital solutions — constantly
-              exploring emerging technologies to build products that make a difference.
+              That finance lens isn't just a credential — it changes how I approach
+              products. I think about efficiency, user flows, and business logic together,
+              not in silos. That makes me especially effective on FinTech products,
+              dashboards, and data-heavy interfaces where design and function both
+              have to perform.
             </p>
           </div>
 
@@ -686,10 +688,10 @@ function About() {
 // =====================
 function Skills() {
   const skills = {
-    Frontend: ["React", "Tailwind CSS", "Framer Motion", "Flutter"],
-    Backend: ["Node.js", "Firebase", "Supabase", "REST APIs"],
-    "Web3 & AI": ["Web3 Concepts", "AI Integration", "Claude Code", "ChatGPT"],
-    Tools: ["Git", "VS Code", "Figma", "Postman"],
+   Frontend: ["React", "Next.js", "JavaScript", "HTML & CSS", "Tailwind CSS", "Framer Motion"],
+    Backend: ["Node.js", "REST APIs", "Firebase", "Supabase"],
+    FinTech: ["Financial Analysis", "Dashboard UI", "Data-heavy Interfaces", "Product Thinking"],
+    Tools: ["Git & GitHub", "Figma", "VS Code", "Vercel / Netlify", "Postman"],
   };
 
   return (
@@ -1041,10 +1043,12 @@ function Experience() {
                 </p>
                 <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
                   {[
-                    "Built experimental Web3-inspired and AI-powered digital products",
-                    "Applied AI coding tools to accelerate development and debugging",
-                    "Designed concepts for decentralised and fintech-style applications",
-                    "Focused on user experience, scalability, and clean interface design",
+                    "Built and deployed web applications using React and Next.js, focusing on performance, responsiveness, and clean UI architecture",
+                    "Developed reusable component libraries in React, reducing development time across multiple product features",
+                    "Implemented server-side rendering (SSR) with Next.js to improve page load speeds and SEO performance",
+                    "Built RESTful API integrations using Node.js, connecting frontend interfaces to backend data sources",
+                    "Designed and coded responsive layouts using HTML and CSS, ensuring cross-browser and cross-device compatibility",
+                    "Applied financial domain knowledge to inform UX decisions on data-heavy dashboards and FinTech-adjacent products",
                   ].map((item, i) => (
                     <div
                       key={i}
@@ -1210,7 +1214,8 @@ function Contact() {
               }}
             >
               Always interested in new opportunities, collaborations, or just a conversation
-              about Web3, AI, and the future of technology.
+              about Frontend development, FinTech products, Web3, AI, and the future of technology, and building things that
+              actually work in the real world.
             </p>
             <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
               {[
