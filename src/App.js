@@ -288,7 +288,7 @@ function Nav() {
 }
 
 // =====================
-// HERO SECTION (RESPONSIVE)
+// HERO SECTION (RESPONSIVE WITH FIXED IMAGE)
 // =====================
 function Hero() {
   return (
@@ -302,45 +302,65 @@ function Hero() {
         overflow: "hidden",
       }}
     >
+      {/* BACKGROUND IMAGE - Fixed z-index */}
       <div
         style={{
           position: "absolute",
           inset: 0,
-          backgroundImage: "url('/profile.png')",
-          backgroundSize: "cover",
-          backgroundPosition: "center top",
-          backgroundRepeat: "no-repeat",
+          zIndex: 0,
         }}
-      />
+      >
+        <img 
+          src="/profile.jpg" 
+          alt="Egberipou Ebeli"
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            objectPosition: "center top",
+          }}
+          onError={(e) => {
+            console.error("Image failed to load: /profile.jpg");
+            e.target.style.display = "none";
+          }}
+        />
+      </div>
+      
+      {/* OVERLAYS - These should be on top of image but below content */}
       <div
         style={{
           position: "absolute",
           inset: 0,
+          zIndex: 1,
           background:
-            "linear-gradient(to right, rgba(13,13,13,0.80) 0%, rgba(13,13,13,0.30) 55%, rgba(13,13,13,0.15) 100%)",
+            "linear-gradient(to right, rgba(13,13,13,0.85) 0%, rgba(13,13,13,0.40) 55%, rgba(13,13,13,0.20) 100%)",
         }}
       />
       <div
         style={{
           position: "absolute",
           inset: 0,
+          zIndex: 1,
           background:
-            "linear-gradient(to top, rgba(13,13,13,1) 0%, rgba(13,13,13,0.6) 35%, transparent 65%)",
+            "linear-gradient(to top, rgba(13,13,13,1) 0%, rgba(13,13,13,0.7) 40%, transparent 70%)",
         }}
       />
       <div
         style={{
           position: "absolute",
           inset: 0,
+          zIndex: 1,
           backgroundImage:
             "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E\")",
           backgroundRepeat: "repeat",
           backgroundSize: "128px",
-          opacity: 0.5,
+          opacity: 0.4,
           mixBlendMode: "overlay",
           pointerEvents: "none",
         }}
       />
+
+      {/* CONTENT - Highest z-index */}
       <div
         style={{
           position: "relative",
@@ -482,6 +502,7 @@ function Hero() {
         </motion.div>
       </div>
 
+      {/* Scroll indicator */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -519,7 +540,6 @@ function Hero() {
     </section>
   );
 }
-
 // =====================
 // SECTION WRAPPER (RESPONSIVE)
 // =====================
